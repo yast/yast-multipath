@@ -1,0 +1,35 @@
+/**
+ * File:
+ *   multipath.scr
+ * Summary:
+ *   SCR Agent for reading/writing /etc/multipath.conf
+ *   using the ini-agent
+ * Access:
+ *   read/write
+ * Authors:
+ *   Coly Li <coyli@novell.com>
+ * Example:
+ *
+ */
+
+.etc.multipath
+
+`ag_ini(
+
+    `IniAgent( "/etc/multipath.conf",
+        $[
+            "options"   : [ "global_values", "repeat_names" ],
+            "comments"  : [ "^[ \t]*#.*$", "^[ \t]*$" ],
+            "params"    : [
+                $[ "match" : [ "^[ \t]*([^ \t]+)[ \t]+([^ \t]+([ \t]*[^ \t]+)*)[ \t]*$", "%s %s" ]],
+            ],
+	    "sections"	: [
+		$[
+                    "begin" : [ "[ \t]*([^ \t]+)*[ \t]*\\{[ \t]*$", "%s {" ],
+                    "end"   : [ "^[ \t]*\\}[ \t]*$", "}" ],
+		],
+	    ],
+            "subindent" : "\t"
+        ]
+    )
+)

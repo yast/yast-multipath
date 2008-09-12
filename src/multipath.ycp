@@ -1,0 +1,93 @@
+/* ------------------------------------------------------------------------------
+ * Copyright (c) 2006 Novell, Inc. All Rights Reserved.
+ *
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of version 2 of the GNU General Public License as published by the
+ * Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, contact Novell, Inc.
+ *
+ * To contact Novell about this file by physical or electronic mail, you may find
+ * current contact information at www.novell.com.
+ * ------------------------------------------------------------------------------
+ */
+
+/**
+ * File:	clients/multipath.ycp
+ * Package:	Configuration of multipath
+ * Summary:	Main file
+ * Authors:	Coly Li <coyli@novell.com>
+ *
+ * $Id: multipath.ycp,v 1.2 2007/01/12 06:43:10 coly Exp $
+ *
+ * Main file for multipath configuration. Uses all other files.
+ */
+
+{
+
+/***
+ * <h3>Configuration of multipath</h3>
+ */
+
+textdomain "multipath";
+
+/* The main () */
+y2milestone ("----------------------------------------");
+y2milestone ("Multipath module started");
+
+import "Progress";
+import "Report";
+import "Summary";
+import "CommandLine";
+include "multipath/wizards.ycp";
+
+map cmdline_description = $[
+    "id" 	: "multipath",
+    /* Command line help text for the Xmultipath module */
+    "help"	: _("Configuration of multipath"),
+    "guihandler"        : MultipathSequence,
+    "initialize"        : Multipath::Read,
+    "finish"            : Multipath::Write,
+    "actions"           : $[
+    ],
+    "options"		: $[
+    ],
+    "mappings"		: $[
+    ]
+];
+
+/* is this proposal or not? */
+boolean propose = false;
+list args = WFM::Args();
+if(size(args) > 0) 
+{
+    if(is(WFM::Args(0), path) && WFM::Args(0) == .propose) 
+    {
+        y2milestone("Using PROPOSE mode");
+        propose = true;
+    }
+}
+
+/* main ui function */
+any ret = nil;
+
+if(propose) 
+    ret = MultipathAutoSequence();
+else 
+    ret = CommandLine::Run(cmdline_description);
+y2debug("ret=%1", ret);
+
+/* Finish */
+y2milestone("Multipath module finished");
+y2milestone("----------------------------------------");
+
+return ret;
+
+/* EOF */
+}

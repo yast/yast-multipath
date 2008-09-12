@@ -1,0 +1,13 @@
+{
+
+// testedfiles: Multipath.ycp
+
+include "testsuite.ycp";
+TESTSUITE_INIT([], nil);
+
+import "Multipath";
+
+DUMP("Multipath::Modified");
+TEST(``(Multipath::Modified()), [], nil);
+
+}
