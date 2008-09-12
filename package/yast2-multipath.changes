@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Sep 12 14:03:42 CEST 2008 - locilka@suse.cz
+
+- Checking and installing required packages only in Mode::normal
+  and Stage::normal (bnc #418703).
+- 2.17.0
+
+-------------------------------------------------------------------
 Thu Jul 31 10:30:00 CEST 2008 - coyli@suse.de
 
 - remove [Back] button from overview page. [bnc#398498]

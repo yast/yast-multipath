@@ -44,6 +44,8 @@ import "Popup";
 import "Wizard";
 import "Confirm";
 import "PackageSystem";
+import "Mode";
+import "Stage";
 
 global boolean config_modified = false;
 
@@ -170,11 +172,18 @@ global boolean Read() {
 	],
 	""
     );
-    list<string> required_pack_list = ["multipath-tools", "device-mapper"];
-    ret = PackageSystem::CheckAndInstallPackagesInteractive (required_pack_list);
-    if(ret == false) {
-	Report::Error(_("Cannot install required packages"));
-	return false;
+
+    // BNC #418703
+    // Checking and Installing packages only if needed (possible)
+    if (Mode::normal() && Stage::normal()) {
+	list<string> required_pack_list = ["multipath-tools", "device-mapper"];
+	ret = PackageSystem::CheckAndInstallPackagesInteractive (required_pack_list);
+	if (ret == false) {
+	    Report::Error(_("Cannot install required packages"));
+	    return false;
+	}
+    } else {
+	y2milestone ("Not checking installed packages");
     }
 
     ret = Read_Configures();
