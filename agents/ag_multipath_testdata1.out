@@ -1,0 +1,52 @@
+mpath2 (3600601607cf30e00184589a37a31d911) DGC,DISK
+[size=127G][features=1 queue_if_no_path][hwhandler=1 emc]
+\_ round-robin 0 [prio=0][active]
+ \_ 0:0:0:2  sdc 8:32  [active][undef]
+mpath1 (3600601607cf30e00174589a37a31d911) DGC,DISK
+[size=127G][features=1 queue_if_no_path][hwhandler=1 emc]
+\_ round-robin 0 [prio=0][active]
+ \_ 0:0:0:1  sdb 8:16  [active][undef]
+mpath0 (3600601607cf30e00164589a37a31d911) DGC,DISK
+[size=127G][features=1 queue_if_no_path][hwhandler=1 emc]
+\_ round-robin 0 [prio=0][active]
+ \_ 0:0:0:0  sda 8:0   [active][undef]
+mpath9 (3600601607cf30e006daf8bb37a31d911) DGC,DISK
+[size=133G][features=1 queue_if_no_path][hwhandler=1 emc]
+\_ round-robin 0 [prio=0][active]
+ \_ 0:0:0:9  sdj 8:144 [active][undef]
+mpath8 (3600601607cf30e006caf8bb37a31d911) DGC,DISK
+[size=133G][features=1 queue_if_no_path][hwhandler=1 emc]
+\_ round-robin 0 [prio=0][active]
+ \_ 0:0:0:8  sdi 8:128 [active][undef]
+mpath7 (3600601607cf30e001d4589a37a31d911) DGC,DISK
+[size=133G][features=1 queue_if_no_path][hwhandler=1 emc]
+\_ round-robin 0 [prio=0][active]
+ \_ 0:0:0:7  sdh 8:112 [active][undef]
+mpath6 (3600601607cf30e001c4589a37a31d911) DGC,DISK
+[size=133G][features=1 queue_if_no_path][hwhandler=1 emc]
+\_ round-robin 0 [prio=0][active]
+ \_ 0:0:0:6  sdg 8:96  [active][undef]
+mpath12 (3600601607cf30e0070af8bb37a31d911) DGC,DISK
+[size=133G][features=1 queue_if_no_path][hwhandler=1 emc]
+\_ round-robin 0 [prio=0][active]
+ \_ 0:0:0:12 sdm 8:192 [active][undef]
+mpath5 (3600601607cf30e001b4589a37a31d911) DGC,DISK
+[size=133G][features=1 queue_if_no_path][hwhandler=1 emc]
+\_ round-robin 0 [prio=0][active]
+ \_ 0:0:0:5  sdf 8:80  [active][undef]
+mpath11 (3600601607cf30e006faf8bb37a31d911) DGC,DISK
+[size=133G][features=1 queue_if_no_path][hwhandler=1 emc]
+\_ round-robin 0 [prio=0][active]
+ \_ 0:0:0:11 sdl 8:176 [active][undef]
+mpath4 (3600601607cf30e001a4589a37a31d911) DGC,DISK
+[size=127G][features=1 queue_if_no_path][hwhandler=1 emc]
+\_ round-robin 0 [prio=0][active]
+ \_ 0:0:0:4  sde 8:64  [active][undef]
+mpath10 (3600601607cf30e006eaf8bb37a31d911) DGC,DISK
+[size=133G][features=1 queue_if_no_path][hwhandler=1 emc]
+\_ round-robin 0 [prio=0][active]
+ \_ 0:0:0:10 sdk 8:160 [active][undef]
+mpath3 (3600601607cf30e00194589a37a31d911) DGC,DISK
+[size=127G][features=1 queue_if_no_path][hwhandler=1 emc]
+\_ round-robin 0 [prio=0][enabled]
+ \_ 0:0:0:3  sdd 8:48  [active][undef]
