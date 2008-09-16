@@ -8,7 +8,6 @@ client_DATA = 			\
 ynclude_DATA =			\
 	complex.ycp		\
 	helps.ycp		\
-	multipath.ycp		\
 	options.ycp		\
 	wizards.ycp
 
