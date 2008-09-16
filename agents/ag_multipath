@@ -1,0 +1,94 @@
+#!/usr/bin/env python
+
+import gettext
+from gettext import textdomain
+textdomain('multipath')
+
+import ycp
+from ycp import *
+import re
+
+# some test data
+# will be replaced with read command
+test_data = {
+    'multipath_device': {
+        'uuid':            "3600601607cf30e00194589a37a31d911",
+        'alias':           "th3",
+        'misc':            "DGC,DISK",
+        'size':            "127G",
+        'features':        "1 queue_if_no_path",
+        'hwhandler':       "1 emc",
+        'path_group': {
+                'selector':        "round-robin 0",
+                'prio':            "0",
+                'status':          "enabled",
+                'path': {
+                        'bus_address':     "0:0:0:3",
+                        'path_device':     "sdd",
+                        'major':           "8",
+                        'minor':           "48",
+                        'status1':         "active",
+                        'status2':         "undef",
+                }
+        }
+    }
+}
+
+def ParseCommand (newline):
+    # newline examples:
+    #   `Read(.)
+    #   `Read (.some.path)
+    #   `Write (.some.path, "value")
+
+    ret = ["","",""]
+
+    # the first argument is command
+    p = re.compile ('^`\w+')
+    if (p.match (newline)):
+	ret[0] = p.search (newline).group()
+    else:
+	y2error ("No command in '%s'" % newline)
+
+    # FIXME: parse path
+    # FIXME: parse arguments
+
+    return ret
+
+while True:
+    #y2debug ("waiting for a command");
+    newline = sys.stdin.readline()
+    #y2debug ("newline: %s" % newline);
+
+    parsed = ParseCommand (newline)
+    command = parsed[0]
+    path = parsed[1]
+    args = parsed[2]
+
+    #y2debug ("Command '%s'" % command);
+
+    # SCR::Read
+    if (command == '`Read'):
+	# convert all data to string
+	# convert Python::dict to YCP::map
+	ret = str(test_data).replace('{','$[').replace('}',']').replace("'", '"')
+	#y2debug ("Data returned: %s" % ret)
+
+	# print the data to stdout as string
+	print ret + "\n"
+	# flushing, otherwise it is buffered
+	sys.stdout.flush()
+
+    # SCR::Write
+    elif (command == '`Write'):
+	y2warnning ("'Write' not supported")
+
+    # Exit
+    elif (command == '`result'):
+	break
+
+    else:
+	y2error ("Unknown command: %s" % command)
+	print "nil\n"
+	sys.stdout.flush()
+
+exit

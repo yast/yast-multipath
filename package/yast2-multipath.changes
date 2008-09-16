@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Sep 16 10:49:26 CEST 2008 - locilka@suse.cz
+
+- Added ag_multipath (written in Python) and multipath.scr
+
+-------------------------------------------------------------------
 Fri Sep 12 14:03:42 CEST 2008 - locilka@suse.cz
 
 - Checking and installing required packages only in Mode::normal
