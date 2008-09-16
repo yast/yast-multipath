@@ -1,6 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+# FIXME: add header
+
+# Authors:
+# File:
+# License / Copyright
+# ...
+
 import gettext
 from gettext import textdomain
 textdomain('multipath')
@@ -8,32 +15,189 @@ textdomain('multipath')
 import ycp
 from ycp import *
 import re
+import os
 
-# some test data
-# will be replaced with read command
-test_data = {
-    'multipath_device': {
-        'uuid':            "3600601607cf30e00194589a37a31d911",
-        'alias':           "th3",
-        'misc':            "DGC,DISK",
-        'size':            "127G",
-        'features':        "1 queue_if_no_path",
-        'hwhandler':       "1 emc",
-        'path_group': {
-                'selector':        "round-robin 0",
-                'prio':            "0",
-                'status':          "enabled",
-                'path': {
-                        'bus_address':     "0:0:0:3",
-                        'path_device':     "sdd",
-                        'major':           "8",
-                        'minor':           "48",
-                        'status1':         "active",
-                        'status2':         "undef",
-                }
-        }
-    }
-}
+class Pattern:
+    uuid = r'^\w{3,}'
+    uuid_spliter_1_start = '('
+    uuid_spliter_1_end = ')'
+    uuid_spliter_2 = ','
+    option = r'\[(\w*=[\w ]*)\]'
+    path_group = r'^\\_'
+    path = r' \\_'
+# <-- class Pattern
+
+class Multipath_Parser:
+
+    def __init__(self, command):
+	self.command = command
+
+    def get_mode(self, dataline):
+        if re.compile(Pattern.uuid).match(dataline):
+            return 'HEAD'
+        elif re.compile(Pattern.option).match(dataline):
+            return 'OPTION'
+        elif re.compile(Pattern.path_group).match(dataline):
+            return 'PATH_GROUP'
+        elif re.compile(Pattern.path).match(dataline):
+            return 'PATH'
+        else:
+            return None
+
+    def parse(self):
+        curr_key = -1
+        curr_group = -1
+        curr_path = -1
+
+	# calls system command
+	# TODO: use non blocking Popen3 class
+        fp = os.popen(self.command)
+        self.data = fp.readlines()
+        fp.close()
+        self.formatted = []
+
+	# parses system command output
+        for dataline in self.data:
+            data_dict, mode = self.parse_line(dataline)
+            if mode == None:
+                continue
+
+            elif mode == 'HEAD':
+                curr_key += 1
+                curr_group = -1
+                curr_path = -1
+                self.formatted.append({})
+                for key in data_dict.keys():
+                    self.formatted[curr_key][key] = data_dict[key]
+
+            elif mode == 'OPTION':
+                for key in data_dict.keys():
+                    self.formatted[curr_key][key] = data_dict[key]
+
+            elif mode == 'PATH_GROUP':
+                curr_group += 1
+                curr_path = -1
+                try:
+                    self.formatted[curr_key]['PG%d' % curr_group].append({})
+                except KeyError:
+                    self.formatted[curr_key]['PG%d' % curr_group] = {}
+
+                for key in data_dict.keys():
+                    self.formatted[curr_key]['PG%d' % curr_group][key] = data_dict[key]
+
+                self.formatted[curr_key]['group_cnt'] = curr_group + 1
+#                print 'DEBUG: %d' % curr_group
+
+            elif mode == 'PATH':
+                curr_path += 1
+                try:
+                    self.formatted[curr_key]['PG%d' % curr_group]['P%d' % curr_path].append({})
+                except KeyError:
+                    self.formatted[curr_key]['PG%d' % curr_group]['P%d' % curr_path] = {}
+
+                for key in data_dict.keys():
+                    self.formatted[curr_key]['PG%d' % curr_group]['P%d' % curr_path][key] = data_dict[key]
+
+                self.formatted[curr_key]['PG%d' % curr_group]['path_cnt'] = curr_path + 1
+
+#            else:
+#                print mode
+#                print data_dict
+
+	# list of maps
+        return self.output()
+
+
+    # Creates YCP list of maps
+    # tabs and newlines are used to provide a human-readable output
+    def output(self):
+        out = "[\n"
+
+        for device in self.formatted:
+            out = out +  '\t$[\n'
+
+	    for key in ['uuid', 'alias', 'misc', 'size', 'features', 'hwhandler']:
+		out = out +  '\t\t"%s":"%s",\n' % (key, device[key])
+
+            for path_group in xrange(device['group_cnt']):
+                out = out +  '\t\t"path_group":$[\n'
+                group_index = 'PG%d' % path_group
+
+		for key in ['selector', 'prio']:
+		    out = out +  '\t\t\t"%s":"%s",\n' % (key, device[group_index][key])
+
+                for path in xrange(device[group_index]['path_cnt']):
+                    out = out +  '\t\t\t"path":$[\n'
+                    path_index = 'P%d' % path
+
+		    out = out +  '\t\t\t\t"%s":"%s",\n' % ('bus_address' , device[group_index][path_index]['bus_addr'])
+
+		    for key in ['path_device', 'major', 'minor', 'status1', 'status2']:
+			out = out +  '\t\t\t\t"%s":"%s",\n' % (key , device[group_index][path_index][key])
+
+                    out = out +  '\t\t\t],\n'
+                out = out +  '\t\t],\n'
+            out = out +  '\t],\n'
+
+	out = out + "]"
+
+        return out
+
+    def parse_line(self, dataline):
+        mode = self.get_mode(dataline)
+        data_dict = {}
+
+        if mode == 'HEAD':
+            if dataline.find(Pattern.uuid_spliter_1_start) != -1:
+                pos_1 = dataline.find(Pattern.uuid_spliter_1_start)
+                pos_2 = dataline.find(Pattern.uuid_spliter_1_end)
+
+                if dataline[:pos_1].find(':') != -1:
+                    data_dict['alias'] = re.compile('\w*: (\w*)').findall(dataline[:pos_1].strip())[0]
+                else:
+                    data_dict['alias'] = dataline[:pos_1].strip()
+                data_dict['uuid']  = dataline[pos_1 + len(Pattern.uuid_spliter_1_start):pos_2].strip()
+                data_dict['misc']  = dataline[pos_2 + len(Pattern.uuid_spliter_1_end):].strip()
+
+            elif dataline.find(Pattern.uuid_spliter_2) != -1:
+                pos_1 = dataline.find(Pattern.uuid_spliter_2)
+
+                data_dict['alias'] = ''
+                data_dict['uuid']  = dataline[:pos_1].strip()
+                data_dict['misc']  = dataline[pos_1 + len(Pattern.uuid_spliter_2):].strip()
+
+            else:
+                pass
+
+
+        elif mode == 'OPTION':
+
+            foobar = re.compile(Pattern.option).findall(dataline)
+            for foo in foobar:
+                data_dict[foo.split('=')[0]] = foo.split('=')[1]
+
+
+        elif mode == 'PATH_GROUP':
+
+            foobar = dataline.split()[1:]
+            data_dict['selector'] = '%s %s' % (foobar[0].strip(), foobar[1].strip())
+            foobar2 = re.compile(Pattern.option).findall(foobar[2])
+            for foo in foobar2:
+                data_dict[foo.split('=')[0]] = foo.split('=')[1]
+
+        elif mode == 'PATH':
+
+            foobar = dataline.split()[1:]
+            data_dict['bus_addr'] = foobar[0]
+            data_dict['path_device'] = foobar[1]
+            data_dict['major'], data_dict['minor'] = foobar[2].split(':')
+            data_dict['status1'], data_dict['status2'] = re.compile('\[(\w*)\]').findall(foobar[3])
+
+        else:
+            pass
+
+        return (data_dict, mode)
+# <-- class Multipath_Parser
 
 def ParseCommand (newline):
     # newline examples:
@@ -55,41 +219,50 @@ def ParseCommand (newline):
 
     return ret
 
-while True:
-    y2debug ("waiting for a command");
-    newline = sys.stdin.readline()
-    y2debug ("newline: %s" % newline);
+def main():
+    while True:
+	y2debug ("waiting for a command");
+	newline = sys.stdin.readline()
+	y2debug ("newline: %s" % newline);
 
-    parsed = ParseCommand (newline)
-    command = parsed[0]
-    path = parsed[1]
-    args = parsed[2]
+	parsed = ParseCommand (newline)
+	command = parsed[0]
+	path = parsed[1]
+	args = parsed[2]
 
-    y2debug ("Command '%s'" % command);
+	y2debug ("Command '%s'" % command);
 
-    # SCR::Read
-    if (command == '`Read'):
-	# convert all data to string
-	# convert Python::dict to YCP::map
-	ret = str(test_data).replace('{','$[').replace('}',']').replace("'", '"')
-	y2debug ("Data returned: %s" % ret)
+	# SCR::Read
+	if (command == '`Read'):
+	    # This is a fake, the command returns what would '/sbin/multipath -l'
+	    # return if it was supported
+	    # You can use ag_multipath_testdata1.out or ag_multipath_testdata2.out
+	    # as a source of data
+	    #
+	    # FIXME: replace with '/sbin/multipath -l'
+	    foobar = Multipath_Parser('/yast/test/multipath/multipath.sh')
+	    ret = foobar.parse()
+	    y2debug ("Data returned: %s" % ret)
 
-	# print the data to stdout as string
-	print ret + "\n"
-	# flushing, otherwise it is buffered
-	sys.stdout.flush()
+	    # print the data to stdout as string
+	    print ret + "\n"
+	    # flushing, otherwise it is buffered
+	    sys.stdout.flush()
 
-    # SCR::Write
-    elif (command == '`Write'):
-	y2warnning ("'Write' not supported")
+	# SCR::Write
+	elif (command == '`Write'):
+	    y2warnning ("'Write' is not supported")
 
-    # Exit
-    elif (command == '`result'):
-	break
+	# Exit
+	elif (command == '`result'):
+	    break
 
-    else:
-	y2error ("Unknown command: %s" % command)
-	print "nil\n"
-	sys.stdout.flush()
+	else:
+	    y2error ("Unknown command: %s" % command)
+	    print "nil\n"
+	    sys.stdout.flush()
+
+if __name__ == '__main__':
+    main()
 
 exit
