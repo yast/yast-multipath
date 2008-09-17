@@ -1,12 +1,29 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-# FIXME: add header
-
-# Authors:
-# File:
-# License / Copyright
-# ...
+#
+# Authors:	Hu Ziming <hzmangel@gmail.com>
+#		Lukas Ocilka <locilka@suse.cz>
+#
+# File:		ag_multipath
+#
+# License:
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#   See the GNU General Public License for more details.
+#   
+#   This program is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU General Public License
+#   as published by the Free Software Foundation; either version
+#   2 of the License, or (at your option) any later version.
+#   
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+#   02111-1307 USA
+#
 
 import gettext
 from gettext import textdomain
@@ -14,6 +31,7 @@ textdomain('multipath')
 
 import ycp
 from ycp import *
+
 import re
 import os
 
@@ -86,7 +104,7 @@ class Multipath_Parser:
                     self.formatted[curr_key]['PG%d' % curr_group][key] = data_dict[key]
 
                 self.formatted[curr_key]['group_cnt'] = curr_group + 1
-#                print 'DEBUG: %d' % curr_group
+                #print 'DEBUG: %d' % curr_group
 
             elif mode == 'PATH':
                 curr_path += 1
@@ -100,9 +118,9 @@ class Multipath_Parser:
 
                 self.formatted[curr_key]['PG%d' % curr_group]['path_cnt'] = curr_path + 1
 
-#            else:
-#                print mode
-#                print data_dict
+            #else:
+            #    print mode
+            #    print data_dict
 
 	# list of maps
         return self.output()
@@ -218,6 +236,7 @@ def ParseCommand (newline):
     # FIXME: parse arguments
 
     return ret
+# <-- ParseCommand
 
 def main():
     while True:
@@ -261,6 +280,7 @@ def main():
 	    y2error ("Unknown command: %s" % command)
 	    print "nil\n"
 	    sys.stdout.flush()
+# <-- main
 
 if __name__ == '__main__':
     main()
