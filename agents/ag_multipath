@@ -217,42 +217,46 @@ class Multipath_Parser:
         return (data_dict, mode)
 # <-- class Multipath_Parser
 
-def ParseCommand (newline):
-    # newline examples:
-    #   `Read(.)
-    #   `Read (.some.path)
-    #   `Write (.some.path, "value")
+class SCR_Agent:
 
-    ret = ["","",""]
+    def __init__(self):
+	self.command = ""
+	self.path = ""
+	self.args = ""
 
-    # the first argument is command
-    p = re.compile ('^`\w+')
-    if (p.match (newline)):
-	ret[0] = p.search (newline).group()
-    else:
-	y2error ("No command in '%s'" % newline)
+    def SCR_Command (self):
+	y2debug ("waiting for a command");
+	scr_command = sys.stdin.readline()
 
-    # FIXME: parse path
-    # FIXME: parse arguments
+	# scr_command examples:
+	#   `Read(.)
+	#   `Read (.some.path)
+	#   `Write (.some.path, "value")
 
-    return ret
-# <-- ParseCommand
+	y2debug ("newline: %s" % scr_command);
+
+	# the first argument is command
+	p = re.compile ('^`\w+')
+	if (p.match (scr_command)):
+	    self.command = p.search (scr_command).group()
+	else:
+	    y2error ("No command in '%s'" % scr_command)
+
+	# FIXME: parse path
+	# FIXME: parse args
+
+    # <-- SCR_Command
+# <-- class SCR_Agent
 
 def main():
     while True:
-	y2debug ("waiting for a command");
-	newline = sys.stdin.readline()
-	y2debug ("newline: %s" % newline);
+	scr_agent = SCR_Agent ()
+	scr_agent.SCR_Command ()
 
-	parsed = ParseCommand (newline)
-	command = parsed[0]
-	path = parsed[1]
-	args = parsed[2]
-
-	y2debug ("Command '%s'" % command);
+	y2debug ("Command '%s'" % scr_agent.command);
 
 	# SCR::Read
-	if (command == '`Read'):
+	if (scr_agent.command == '`Read'):
 	    # This is a fake, the command returns what would '/sbin/multipath -l'
 	    # return if it was supported
 	    # You can use ag_multipath_testdata1.out or ag_multipath_testdata2.out
@@ -269,15 +273,15 @@ def main():
 	    sys.stdout.flush()
 
 	# SCR::Write
-	elif (command == '`Write'):
+	elif (scr_agent.command == '`Write'):
 	    y2warnning ("'Write' is not supported")
 
 	# Exit
-	elif (command == '`result'):
+	elif (scr_agent.command == '`result'):
 	    break
 
 	else:
-	    y2error ("Unknown command: %s" % command)
+	    y2error ("Unknown command: %s" % scr_agent.command)
 	    print "nil\n"
 	    sys.stdout.flush()
 # <-- main
