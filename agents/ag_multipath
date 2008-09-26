@@ -262,8 +262,9 @@ def main():
 	    # You can use ag_multipath_testdata1.out or ag_multipath_testdata2.out
 	    # as a source of data
 	    #
-	    # FIXME: replace with '/sbin/multipath -l'
-	    foobar = Multipath_Parser('/yast/test/multipath/multipath.sh')
+	    # foobar = Multipath_Parser('/yast/test/multipath/multipath.sh')
+
+	    foobar = Multipath_Parser('/sbin/multipath -l')
 	    ret = foobar.parse()
 	    y2debug ("Data returned: %s" % ret)
 
