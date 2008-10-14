@@ -502,7 +502,7 @@ map check_path_gp(map item)
 	ret["info"] = "";
     } else {
 	ret["result"] = false;
-	ret["info"] = "* \"path_grouping_policy\" " + _("illgal value") + "\n";
+	ret["info"] = "* \"path_grouping_policy\" " + _("illegal value") + "\n";
     }
     return ret;
 }
