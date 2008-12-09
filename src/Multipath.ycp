@@ -328,10 +328,11 @@ global any SummaryDialog() {
 
     any ret = nil;
     symbol current_tab = `status;
-    integer interval_millisec = 5000;
+    integer interval_millisec = 50;
 
     while(true) {
 	ret = UI::TimeoutUserInput(interval_millisec);
+	interval_millisec = 5000;
 	if(ret == `next) {
 	    break;
 	}
