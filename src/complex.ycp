@@ -33,6 +33,7 @@
 textdomain "multipath";
 
 import "Service";
+import "Storage";
 
 integer service_status = 0;
 boolean has_dumbtab = false;
@@ -2659,8 +2660,12 @@ any Devices_Dialog() {
 
 
 void Update_Service_Status() {
-    integer ret = Service::Status("multipathd");
-//    integer ret = (integer) SCR::Execute(.target.bash, "/etc/init.d/multipathd status");
+	integer ret = 0;
+	if (Mode::normal() && Stage::normal()) {
+		ret = Service::Status("multipathd");
+	} else {
+		ret = (integer)SCR::Execute(.target.bash, "/bin/ps -A -o comm | grep -q multipathd");
+	}
     if (ret == 0) {
         UI::ChangeWidget(`id(`stop_multipath), `Value, false);
         UI::ChangeWidget(`id(`start_multipath), `Value, true);
@@ -2691,37 +2696,61 @@ void Update_Service_Status() {
     UI::ChangeWidget(`id(`status_summary_id), `Value, info);	
 }
 
+void CallInsserv( boolean on, string name )
+{
+	y2milestone( "CallInsserv on:%1 name:%2", on, name );
+	string scrname = "/etc/init.d/" + name;
+	if( SCR::Read( .target.size, scrname )>0 )
+	{
+		string cmd = "cd / && /sbin/insserv ";
+		if( !on )
+			cmd = cmd + "-r ";
+		cmd = cmd + scrname;
+		y2milestone( "CallInsserv cmd %1", cmd );
+		map bo = (map)SCR::Execute (.target.bash_output, cmd );
+		y2milestone( "CallInsserv bo %1", bo );
+	}
+}
+
 void Start_Service() {
     if (service_status == 1)
 	return;
     string prop_info = _("Use multipath failed:") + "\n";
 
-    boolean ret = Service::Enable("boot.multipath");
-    if (ret == false)
-    {
-	prop_info = prop_info + _("* Can not enable boot.multipath") + "\n";
-	Popup::Message(prop_info);
-	Update_Service_Status();
-	return;
-    }
-    ret = Service::Enable("multipathd");
-    if (ret == false)
-    {
-	prop_info = prop_info + _("* Can not enable multipathd") + "\n";
-	Popup::Message(prop_info);
-	Update_Service_Status();
-	return;
-    }
-    /* do not check result for starting boot.multipath */
-    ret = Service::Start("boot.multipath");
-    ret = Service::Start("multipathd"); 
-    if (ret == false)
-    {
-	prop_info = prop_info + _("* Can not start multipathd") + "\n";
-	Popup::Message(prop_info);
-	Update_Service_Status();
-	return;
-    }
+	if (Mode::normal() && Stage::normal()) {
+		boolean ret = Service::Enable("boot.multipath");
+		if (ret == false)
+		{
+			prop_info = prop_info + _("* Can not enable boot.multipath") + "\n";
+			Popup::Message(prop_info);
+			Update_Service_Status();
+			return;
+		}
+		ret = Service::Enable("multipathd");
+		if (ret == false)
+		{
+			prop_info = prop_info + _("* Can not enable multipathd") + "\n";
+			Popup::Message(prop_info);
+			Update_Service_Status();
+			return;
+		}
+		/* do not check result for starting boot.multipath */
+		ret = Service::Start("boot.multipath");
+		ret = Service::Start("multipathd");
+		if (ret == false)
+		{
+			prop_info = prop_info + _("* Can not start multipathd") + "\n";
+			Popup::Message(prop_info);
+			Update_Service_Status();
+			return;
+		}
+
+	} else {
+//		CallInsserv(true, "boot.multipath");
+//		CallInsserv(true, "multipathd");
+		Storage::ActivateMultipath(true);
+	}
+
     service_status = 1;
     Update_Service_Status();
 }
@@ -2731,32 +2760,40 @@ void Stop_Service() {
 	return;
     string prop_info = _("Do not use multipath failed:") + "\n";
 
-    boolean ret = Service::Stop("multipathd");
-    if (ret == false)
-    {
-	prop_info = prop_info + _("* Can not stop multipath") + "\n";
-	Popup::Message(prop_info);
-	Update_Service_Status();
-	return;
-    }
-    /* do not check result of stopping boot.multipath */
-    ret = Service::Stop("boot.multipath");
-    ret = Service::Disable("multipathd");
-    if (ret == false)
-    {
-	prop_info = prop_info + _("* Can not disable multipathd") + "\n";
-	Popup::Message(prop_info);
-	Update_Service_Status();
-	return;
-    }
-    ret = Service::Disable("boot.multipath");
-    if (ret == false)
-    {
-	prop_info = prop_info + _("* Can not disable boot.multipath") + "\n";
-	Popup::Message(prop_info);
-	Update_Service_Status();
-	return;
-    }
+	if (Mode::normal() && Stage::normal()) {
+		boolean ret = Service::Stop("multipathd");
+		if (ret == false)
+		{
+			prop_info = prop_info + _("* Can not stop multipath") + "\n";
+			Popup::Message(prop_info);
+			Update_Service_Status();
+			return;
+		}
+		/* do not check result of stopping boot.multipath */
+		ret = Service::Stop("boot.multipath");
+		ret = Service::Disable("multipathd");
+		if (ret == false)
+		{
+			prop_info = prop_info + _("* Can not disable multipathd") + "\n";
+			Popup::Message(prop_info);
+			Update_Service_Status();
+			return;
+		}
+		ret = Service::Disable("boot.multipath");
+		if (ret == false)
+		{
+			prop_info = prop_info + _("* Can not disable boot.multipath") + "\n";
+			Popup::Message(prop_info);
+			Update_Service_Status();
+			return;
+		}
+
+	} else {
+		Storage::ActivateMultipath(false);
+//		CallInsserv(false, "multipathd");
+//		CallInsserv(false, "boot.multipath");
+	}
+
     service_status = 0;
     Update_Service_Status();
 }
