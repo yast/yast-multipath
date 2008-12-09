@@ -46,6 +46,7 @@ import "Confirm";
 import "PackageSystem";
 import "Mode";
 import "Stage";
+import "Storage";
 
 global boolean config_modified = false;
 
@@ -81,7 +82,7 @@ boolean Modified() {
 
 /**
  * work around a bug in compiling ybc with UI as Y2Namespace
- *  #299258 
+ *  #299258
  */
 any dummy = UI::GetDisplayInfo();
 
@@ -92,14 +93,14 @@ include "multipath/complex.ycp";
 boolean Read_Configures()
 {
     boolean ret = false;
-    
+
     config_modified = false;
     defaults_items = $[];
     devices_items = [];
     multipaths_items = [];
     blacklist_items = [];
     blacklist_exception_items = [];
-    
+
 
     /* prepare for loading built-in configurations */
     SCR::Execute(.target.bash, "/sbin/multipath -t > " + builtin_multipath_conf_path);
@@ -175,14 +176,17 @@ global boolean Read() {
 
     // BNC #418703
     // Checking and Installing packages only if needed (possible)
-    if (Mode::normal() && Stage::normal()) {
 	list<string> required_pack_list = ["multipath-tools", "device-mapper"];
+    if (Mode::normal() && Stage::normal()) {
 	ret = PackageSystem::CheckAndInstallPackagesInteractive (required_pack_list);
 	if (ret == false) {
 	    Report::Error(_("Cannot install required packages"));
 	    return false;
 	}
     } else {
+		import "PackagesProposal";
+		string proposal_ID = "multipath_proposal";
+		PackagesProposal::SetResolvables(proposal_ID, `package, required_pack_list);
 	y2milestone ("Not checking installed packages");
     }
 
@@ -194,9 +198,15 @@ global boolean Read() {
     sleep(sl);
 
     /* read multipath service status */
-    service_status = (integer) SCR::Execute(.target.bash, "/etc/init.d/multipathd status");
-    if(service_status > 0)
-	service_status = 1;
+	if (Mode::normal() && Stage::normal()) {
+		service_status = (integer) SCR::Execute(.target.bash, "/etc/init.d/multipathd status");
+		if(service_status > 0)
+			service_status = 1;
+	} else {
+		service_status = (integer) SCR::Execute(.target.bash, "/bin/ps -A -o comm | grep -q multipathd");
+		if (service_status != 0)
+			service_status = 1;
+	}
     Progress::NextStep();
     sleep(sl);
 
@@ -266,13 +276,19 @@ global boolean Write() {
 
     /* restart multipathd */
     Progress::NextStage ();
+
     if(service_status == 1) {
-	if( 0 != SCR::Execute(.target.bash, "/etc/init.d/multipathd restart")) {
-	    Report::Error(_("Restart multipathd failed."));
-	    return false;
+		if (Mode::normal() && Stage::normal()) {
+			if( 0 != SCR::Execute(.target.bash, "/etc/init.d/multipathd restart")) {
+				Report::Error(_("Restart multipathd failed."));
+				return false;
+			}
+		} else {
+			Storage::ActivateMultipath(false);
+			Storage::ActivateMultipath(true);
+		}
+		sleep(sl);
 	}
-	sleep(sl);
-    }
 
     /* Progress finished */
     Progress::NextStage();
@@ -330,6 +346,12 @@ global any SummaryDialog() {
     symbol current_tab = `status;
     integer interval_millisec = 50;
 
+	// Disable configure tab during installation
+	if (!(Mode::normal() && Stage::normal())) {
+		if (!has_dumbtab)
+			UI::ChangeWidget(`id(_("Configure")), `Enabled, false);
+	}
+
     while(true) {
 	ret = UI::TimeoutUserInput(interval_millisec);
 	interval_millisec = 5000;
@@ -356,6 +378,12 @@ global any SummaryDialog() {
 	    current_tab = `status;
 	    continue;
 	} else if (ret == _("Configure")) {
+		if (!(Mode::normal() && Stage::normal())) {
+			Popup::Message("Can't change configuration of multipath during installation");
+			if (has_dumbtab)
+				UI::ChangeWidget(`id(`tabs), `CurrentItem, _("Status"));
+			continue;
+		}
 	    Wizard::SetContentsButtons(caption, contents, HELPS["Configure_help"]:"",
 					Label::BackButton(), Label::FinishButton());
 	    Wizard::HideBackButton();
