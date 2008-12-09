@@ -69,8 +69,8 @@ Please wait...<br></p>
 			Click <b>\"Configure Blacklist\"</b> button to configure blacklist settings.<br>
 			<b>Blacklist Exceptions:</b> list of device names to be excluded from blacklist.<br>
 			Click <b>\"Configure Blacklist Exceptions\"</b> button to configure blacklist_exceptions settings.<br>
-			<b>Devices:</b> list of per storage controler settings. Overrides default settings, verriden by per multipath settings.<br>
-			Click <b>\"Devices configure\"</b> button to configure devices settings.<br><br>
+			<b>Devices:</b> list of per storage controler settings. Overrides default settings, overriden by per multipath settings.<br>
+			Click <b>\"Configure devices\"</b> button to configure devices settings.<br><br>
 			Click <b>\"Finish\"</b> button to save and update the configurations.<br><br></p>
 "),
 
