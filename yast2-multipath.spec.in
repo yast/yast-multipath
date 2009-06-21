@@ -16,7 +16,6 @@ devices connecting them.
 
 You can configure your multipathed devices with this module.
 
-
 @PREP@
 
 @BUILD@
