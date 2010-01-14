@@ -17,8 +17,7 @@ X-SuSE-YaST-SortKey=
 X-SuSE-YaST-AutoInstResource=multipath
 
 Icon=yast-iscsi-server
-Exec=/sbin/yast2 multipath 
+Exec=xdg-su -c "/sbin/yast2 multipath"
 
 Name=Multipath
 GenericName=multipath
-X-KDE-SubstituteUID=true
