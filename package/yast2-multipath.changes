@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Jan 13 18:56:03 CET 2010 - kmachalkova@suse.cz
+
+- Adjusted .desktop file(s) to wrap /sbin/yast2/ calls in xdg-su
+  where root privileges are needed, removed X-KDE-SubstituteUID key 
+  (bnc#540627)
+
+-------------------------------------------------------------------
 Tue Sep 16 10:49:26 CEST 2008 - locilka@suse.cz
 
 - Added ag_multipath (written in Python) and multipath.scr
