@@ -2495,7 +2495,7 @@ boolean check_dv_config(map item) {
 		vendor_str == e["vendor"]:"NA" &&
 		product_str == e["product"]:"NA")
 	{
-	    prop_info = _("Duplicated configuraton");
+	    prop_info = _("Duplicated configuration");
 	    Popup::Message(prop_info);
 	    result = false;
 	    break;
