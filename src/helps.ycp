@@ -69,7 +69,7 @@ Please wait...<br></p>
 			Click <b>\"Configure Blacklist\"</b> button to configure blacklist settings.<br>
 			<b>Blacklist Exceptions:</b> list of device names to be excluded from blacklist.<br>
 			Click <b>\"Configure Blacklist Exceptions\"</b> button to configure blacklist_exceptions settings.<br>
-			<b>Devices:</b> list of per storage controler settings. Overrides default settings, overriden by per multipath settings.<br>
+			<b>Devices:</b> list of per storage controller settings. Overrides default settings, overridden by per multipath settings.<br>
 			Click <b>\"Configure devices\"</b> button to configure devices settings.<br><br>
 			Click <b>\"Finish\"</b> button to save and update the configurations.<br><br></p>
 "),
@@ -101,7 +101,7 @@ Please wait...<br></p>
 
     /* dialog help for devcies section configure tab 1/3 */ 
     "Devices_help": _("<p><b><big>Devices Configuration</big></b><br>
-			Per storage controler settings are listed here, they override the default settings and are overriden by per multipath settings.<br>
+			Per storage controller settings are listed here, they override the default settings and are overridden by per multipath settings.<br>
 			Each device is identified by <b>vendor</b> and <b>product</b> name.<br></p>
 "),
 ];
