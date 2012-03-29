@@ -37,13 +37,13 @@ textdomain "multipath";
 map HELPS = $[
 
     /* Read dialog help 1/2 */
-    "read" : _("<p><b><big>Initializing multipath Configuration</big></b><br>
-Please wait...<br></p>
+    "read" : _("<p><b><big>Initializing Multipath Configuration</big></b><br>
+</p>
 "),
 
     /* Write dialog help 1/2 */
-    "write" : _("<p><b><big>Saving multipath Configuration</big></b><br>
-Please wait...<br></p>
+    "write" : _("<p><b><big>Saving Multipath Configuration</big></b><br>
+</p>
 "),
 
     /* dialog help for Status help */

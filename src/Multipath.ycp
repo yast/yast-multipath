@@ -107,31 +107,31 @@ boolean Read_Configures()
 
     ret = Read_MultipathConfig();
     if(ret == false) {
-	Report::Error(_("Cannot read multipath section in multipath configuration"));
+	Report::Error(_("Cannot read multipath section in multipath configuration."));
 	return false;
     }
 
     ret = Read_DefaultsConfig();
     if(ret == false) {
-	Report::Error(_("Cannot read defaults section in multipath configuration"));
+	Report::Error(_("Cannot read defaults section in multipath configuration."));
 	return false;
     }
 
     ret = Read_BlacklistConfig();
     if(ret == false) {
-	Report::Error(_("Cannot read blacklist section in multipath configuration"));
+	Report::Error(_("Cannot read blacklist section in multipath configuration."));
 	return false;
     }
 
     ret = Read_BlacklistException_Config();
     if(ret == false) {
-	Report::Error(_("Cannot read blacklist_exceptions section in multipath configuration"));
+	Report::Error(_("Cannot read blacklist_exceptions section in multipath configuration."));
 	return false;
     }
 
     ret = Read_DeviceConfig();
     if(ret == false) {
-	Report::Error(_("Cannot read devices section in multipath configuration"));
+	Report::Error(_("Cannot read devices section in multipath configuration."));
 	return false;
     }
     return true;
@@ -146,7 +146,7 @@ global boolean Read() {
     boolean ret = false;
 
     /* Multipath read dialog caption */
-    string caption = _("Initializing multipath Configuration");
+    string caption = _("Initializing Multipath Configuration");
 
     integer steps = 4;
 
@@ -180,7 +180,7 @@ global boolean Read() {
     if (Mode::normal() && Stage::normal()) {
 	ret = PackageSystem::CheckAndInstallPackagesInteractive (required_pack_list);
 	if (ret == false) {
-	    Report::Error(_("Cannot install required packages"));
+	    Report::Error(_("Cannot install required packages."));
 	    return false;
 	}
     } else {
@@ -236,7 +236,7 @@ global boolean Read() {
  */
 global boolean Write() {
     /* Multipath read dialog caption */
-    string caption = _("Saving multipath Configuration");
+    string caption = _("Saving Multipath Configuration");
 
     integer steps = 2;
 
@@ -280,7 +280,7 @@ global boolean Write() {
     if(service_status == 1) {
 		if (Mode::normal() && Stage::normal()) {
 			if( 0 != SCR::Execute(.target.bash, "/etc/init.d/multipathd restart")) {
-				Report::Error(_("Restart multipathd failed."));
+				Report::Error(_("Restarting multipathd failed."));
 				return false;
 			}
 		} else {
@@ -395,7 +395,7 @@ global any SummaryDialog() {
 	    continue;
         } else if(ret == `start_multipath) {
 	    if (Modified() == true &&
-		Popup::YesNo(_("Ignore your modification ?")) == false)
+		Popup::YesNo(_("Ignore your modification?")) == false)
 	    {
 		    Update_Service_Status();
 		    continue;
@@ -405,7 +405,7 @@ global any SummaryDialog() {
 	    continue;
 	} else if(ret == `stop_multipath) {
 	    if (Modified() == true &&
-		Popup::YesNo(_("Ignore your modification ?")) == false)
+		Popup::YesNo(_("Ignore your modification?")) == false)
 	    {
 		    Update_Service_Status();
 		    continue;
