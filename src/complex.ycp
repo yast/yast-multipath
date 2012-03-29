@@ -2721,7 +2721,7 @@ void Start_Service() {
 		boolean ret = Service::Enable("boot.multipath");
 		if (ret == false)
 		{
-			prop_info = prop_info + _("* Can not enable boot.multipath") + "\n";
+			prop_info = prop_info + _("* Cannot enable boot.multipath.") + "\n";
 			Popup::Message(prop_info);
 			Update_Service_Status();
 			return;
@@ -2729,7 +2729,7 @@ void Start_Service() {
 		ret = Service::Enable("multipathd");
 		if (ret == false)
 		{
-			prop_info = prop_info + _("* Can not enable multipathd") + "\n";
+			prop_info = prop_info + _("* Cannot enable multipathd.") + "\n";
 			Popup::Message(prop_info);
 			Update_Service_Status();
 			return;
@@ -2739,7 +2739,7 @@ void Start_Service() {
 		ret = Service::Start("multipathd");
 		if (ret == false)
 		{
-			prop_info = prop_info + _("* Can not start multipathd") + "\n";
+			prop_info = prop_info + _("* Cannot start multipathd.") + "\n";
 			Popup::Message(prop_info);
 			Update_Service_Status();
 			return;
@@ -2764,7 +2764,7 @@ void Stop_Service() {
 		boolean ret = Service::Stop("multipathd");
 		if (ret == false)
 		{
-			prop_info = prop_info + _("* Can not stop multipath") + "\n";
+			prop_info = prop_info + _("* Cannot stop multipath.") + "\n";
 			Popup::Message(prop_info);
 			Update_Service_Status();
 			return;
@@ -2774,7 +2774,7 @@ void Stop_Service() {
 		ret = Service::Disable("multipathd");
 		if (ret == false)
 		{
-			prop_info = prop_info + _("* Can not disable multipathd") + "\n";
+			prop_info = prop_info + _("* Cannot disable multipathd.") + "\n";
 			Popup::Message(prop_info);
 			Update_Service_Status();
 			return;
@@ -2782,7 +2782,7 @@ void Stop_Service() {
 		ret = Service::Disable("boot.multipath");
 		if (ret == false)
 		{
-			prop_info = prop_info + _("* Can not disable boot.multipath") + "\n";
+			prop_info = prop_info + _("* Cannot disable boot.multipath.") + "\n";
 			Popup::Message(prop_info);
 			Update_Service_Status();
 			return;
