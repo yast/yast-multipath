@@ -30,6 +30,8 @@
  * by Multipath.ycp.
  */
 
+{
+
 textdomain "multipath";
 
 import "Service";
@@ -2798,5 +2800,4 @@ void Stop_Service() {
     Update_Service_Status();
 }
 
-
-
+}
