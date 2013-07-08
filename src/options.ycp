@@ -30,6 +30,7 @@
  * by complex.ycp.
  * The default options can be used in defauts section, and other sections.
  */
+{
 
 textdomain "multipath";
 
@@ -1807,4 +1808,4 @@ list<symbol> blacklist_section_items = [
 	`product
     ];
 
-
+}
