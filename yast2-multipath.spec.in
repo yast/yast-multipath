@@ -9,6 +9,8 @@ BuildRequires:	yast2-storage
 
 BuildArchitectures:	noarch
 
+Requires:       yast2-ruby-bindings >= 1.0.0
+
 Summary: YaST2 - Multipath Configuration
 
 %description
@@ -29,11 +31,11 @@ You can configure your multipathed devices with this module.
 
 %files
 %defattr(-,root,root)
-%dir %{prefix}/share/YaST2/include/multipath
-%{prefix}/share/YaST2/include/multipath/*
-%{prefix}/share/YaST2/clients/multipath.ycp
-%{prefix}/share/YaST2/modules/Multipath.*
-%{prefix}/share/applications/YaST2/multipath.desktop
-%{prefix}/share/YaST2/scrconf/*.scr
-%{prefix}/lib/YaST2/servers_non_y2/*
-%doc %{prefix}/share/doc/packages/yast2-multipath
+%dir %{_prefix}/share/YaST2/include/multipath
+%{_prefix}/share/YaST2/include/multipath/*
+%{_prefix}/share/YaST2/clients/multipath.rb
+%{_prefix}/share/YaST2/modules/Multipath.*
+%{_prefix}/share/applications/YaST2/multipath.desktop
+%{_prefix}/share/YaST2/scrconf/*.scr
+%{_prefix}/lib/YaST2/servers_non_y2/*
+%doc %{_prefix}/share/doc/packages/yast2-multipath
