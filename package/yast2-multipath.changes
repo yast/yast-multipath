@@ -1,3 +1,10 @@
+-------------------------------------------------------------------
+Wed Jul 31 08:33:06 UTC 2013 - yast-devel@opensuse.org
+
+- converted from YCP to Ruby by YCP Killer
+  (https://github.com/yast/ycp-killer)
+- version 3.0.0
+
 #
 # FIXME: Development of YaST Multipath in SVN discontinued after
 #        taking over by xwhu@novell.com in 2008. It's currently
