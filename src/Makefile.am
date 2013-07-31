@@ -1,27 +1,28 @@
-# Makefile.am for multipath/src
+# Sources for multipath
+
+module_DATA = \
+  modules/Multipath.rb
+
+client_DATA = \
+  clients/multipath.rb
 
 yncludedir = @yncludedir@/multipath
+ynclude_DATA = \
+  include/multipath/wizards.rb \
+  include/multipath/options.rb \
+  include/multipath/complex.rb \
+  include/multipath/helps.rb
 
-client_DATA = 			\
-	multipath.ycp
+scrconf_DATA = \
+  scrconf/etc_multipath.scr \
+  scrconf/multipath.scr
 
-ynclude_DATA =			\
-	complex.ycp		\
-	helps.ycp		\
-	options.ycp		\
-	wizards.ycp
+agent_SCRIPTS = \
+  servers_non_y2/ag_multipath
 
-desktop_DATA =			\
-	multipath.desktop
+desktop_DATA = \
+  desktop/multipath.desktop
 
-module_DATA =			\
-	Multipath.ycp
-
-# create a symlink for local build, #145327
-multipath:
-	ln -sf . $@
-ycpchook = multipath
-
-EXTRA_DIST = $(client_DATA) $(ynclude_DATA) $(module_DATA) $(desktop_DATA)
+EXTRA_DIST = $(module_DATA) $(client_DATA) $(ynclude_DATA) $(scrconf_DATA) $(agent_SCRIPTS) $(desktop_DATA)
 
 include $(top_srcdir)/Makefile.am.common
