@@ -2248,7 +2248,7 @@ module Yast
               else
                 match = false
               end
-              match ? new_item : item
+              match ? deep_copy(new_item) : deep_copy(item)
             end
             break
           end
@@ -2918,7 +2918,7 @@ module Yast
               else
                 match = false
               end
-              match ? new_item : item
+              match ? deep_copy(new_item) : deep_copy(item)
             end
             break
           end
