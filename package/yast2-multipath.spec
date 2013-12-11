@@ -27,7 +27,7 @@ Group:	        System/YaST
 License:        GPL-2.0+
 Requires:	yast2 yast2-python-bindings
 BuildRequires:	perl-XML-Writer update-desktop-files yast2 yast2-testsuite
-BuildRequires:  yast2-devtools >= 3.0.6
+BuildRequires:  yast2-devtools >= 3.1.10
 BuildRequires:	yast2-storage
 
 BuildArchitectures:	noarch
