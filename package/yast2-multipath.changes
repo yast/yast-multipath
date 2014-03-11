@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Mar 11 06:50:39 UTC 2014 - dmzhang@suse.com
+
+- remove yast2-python-binding dependence 
+
+-------------------------------------------------------------------
 Wed Nov 13 15:56:18 UTC 2013 - jreidinger@suse.com
 
 - Add explicit COPYING file

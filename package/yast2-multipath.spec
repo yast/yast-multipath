@@ -25,7 +25,7 @@ Source0:        %{name}-%{version}.tar.bz2
 
 Group:	        System/YaST
 License:        GPL-2.0+
-Requires:	yast2 yast2-python-bindings
+Requires:	yast2
 BuildRequires:	perl-XML-Writer update-desktop-files yast2 yast2-testsuite
 BuildRequires:  yast2-devtools >= 3.1.10
 BuildRequires:	yast2-storage
