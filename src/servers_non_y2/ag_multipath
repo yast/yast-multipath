@@ -29,11 +29,10 @@ import gettext
 from gettext import textdomain
 textdomain('multipath')
 
-import ycp
-from ycp import *
 
 import re
 import os
+import sys
 
 class Pattern:
     uuid = r'^\w{3,}'
@@ -225,7 +224,6 @@ class SCR_Agent:
 	self.args = ""
 
     def SCR_Command (self):
-	y2debug ("waiting for a command");
 	scr_command = sys.stdin.readline()
 
 	# scr_command examples:
@@ -233,14 +231,11 @@ class SCR_Agent:
 	#   `Read (.some.path)
 	#   `Write (.some.path, "value")
 
-	y2debug ("newline: %s" % scr_command);
 
 	# the first argument is command
 	p = re.compile ('^`\w+')
 	if (p.match (scr_command)):
 	    self.command = p.search (scr_command).group()
-	else:
-	    y2error ("No command in '%s'" % scr_command)
 
 	# FIXME: parse path
 	# FIXME: parse args
@@ -253,7 +248,6 @@ def main():
 	scr_agent = SCR_Agent ()
 	scr_agent.SCR_Command ()
 
-	y2debug ("Command '%s'" % scr_agent.command);
 
 	# SCR::Read
 	if (scr_agent.command == '`Read'):
@@ -266,23 +260,16 @@ def main():
 
 	    foobar = Multipath_Parser('/sbin/multipath -l')
 	    ret = foobar.parse()
-	    y2debug ("Data returned: %s" % ret)
 
 	    # print the data to stdout as string
 	    print ret + "\n"
 	    # flushing, otherwise it is buffered
 	    sys.stdout.flush()
 
-	# SCR::Write
-	elif (scr_agent.command == '`Write'):
-	    y2warnning ("'Write' is not supported")
-
 	# Exit
 	elif (scr_agent.command == '`result'):
 	    break
-
 	else:
-	    y2error ("Unknown command: %s" % scr_agent.command)
 	    print "nil\n"
 	    sys.stdout.flush()
 # <-- main
