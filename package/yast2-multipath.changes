@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri May  9 09:10:29 UTC 2014 - nwang@suse.com
+
+- BNC#875677. Modify desktop file. Change category from Misc to HA. 
+
+-------------------------------------------------------------------
 Tue Mar 11 06:50:39 UTC 2014 - dmzhang@suse.com
 
 - remove yast2-python-binding dependence 
