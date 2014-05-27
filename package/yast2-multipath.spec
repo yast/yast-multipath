@@ -1,7 +1,7 @@
 #
 # spec file for package yast2-multipath
 #
-# Copyright (c) 2013 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -17,24 +17,27 @@
 
 
 Name:           yast2-multipath
-Version:        3.1.1
+Version:        3.1.2
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Source0:        %{name}-%{version}.tar.bz2
 
-Group:	        System/YaST
-License:        GPL-2.0+
-Requires:	yast2
-BuildRequires:	perl-XML-Writer update-desktop-files yast2 yast2-testsuite
+Requires:       yast2
+BuildRequires:  perl-XML-Writer
+BuildRequires:  update-desktop-files
+BuildRequires:  yast2
 BuildRequires:  yast2-devtools >= 3.1.10
-BuildRequires:	yast2-storage
+BuildRequires:  yast2-storage
+BuildRequires:  yast2-testsuite
 
-BuildArchitectures:	noarch
+BuildArch:      noarch
 
 Requires:       yast2-ruby-bindings >= 1.0.0
 
-Summary: YaST2 - Multipath Configuration
+Summary:        YaST2 - Multipath Configuration
+License:        GPL-2.0+
+Group:          System/YaST
 
 %description
 Multipath I/O is a fault tolerance technique whereby there is more than
@@ -53,7 +56,6 @@ You can configure your multipathed devices with this module.
 %install
 %yast_install
 
-
 %files
 %defattr(-,root,root)
 %dir %{_prefix}/share/YaST2/include/multipath
@@ -64,3 +66,5 @@ You can configure your multipathed devices with this module.
 %{_prefix}/share/YaST2/scrconf/*.scr
 %{_prefix}/lib/YaST2/servers_non_y2/*
 %doc %{_prefix}/share/doc/packages/yast2-multipath
+
+%changelog
