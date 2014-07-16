@@ -1294,16 +1294,15 @@ module Yast
 
     def Multipath_Dialog(option)
       if option == :multipaths_del_id
-        cur = Convert.to_integer(
-          UI.QueryWidget(Id(:multipaths_table_id), :CurrentItem)
-        )
+        cur =  UI.QueryWidget(Id(:multipaths_table_id), :CurrentItem).to_i
         cur_item = Convert.to_term(
           UI.QueryWidget(Id(:multipaths_table_id), term(:Item, cur))
         )
+
         @multipaths_items = Builtins.filter(@multipaths_items) do |item|
-          _alias = Builtins.sformat("%1", Ops.get_string(cur_item, 1, "NA"))
+          _wwid = Builtins.sformat("%1", Ops.get_string(cur_item, 2, "NA"))
           ret = false
-          ret = Ops.get_string(item, "alias", "NA") != _alias
+          ret = Ops.get_string(item, "wwid", "NA") != _wwid
           Multipath.config_modified = true if ret == false
           ret
         end
