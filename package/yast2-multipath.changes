@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Oct 30 02:30:24 UTC 2014 - nwang@suse.com
+
+- BNC#900822. Remove start/stop "boot.multipath" due to
+  it is obsoleted.Fix in SLE12 Maintenance Update.
+- Version 3.1.4
+
+-------------------------------------------------------------------
 Wed Jul 16 08:00:37 UTC 2014 - nwang@suse.com
 
 - BNC#887467. Fix fail to delete multipath without an "alias".
