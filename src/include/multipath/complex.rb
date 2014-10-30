@@ -3647,16 +3647,6 @@ module Yast
       prop_info = _("Use multipath failed:") + "\n"
 
       if Mode.normal && Stage.normal
-        ret = Service.Enable("boot.multipath")
-        if ret == false
-          prop_info = Ops.add(
-            Ops.add(prop_info, _("* Cannot enable boot.multipath.")),
-            "\n"
-          )
-          Popup.Message(prop_info)
-          Update_Service_Status()
-          return
-        end
         ret = Service.Enable("multipathd")
         if ret == false
           prop_info = Ops.add(
@@ -3667,8 +3657,6 @@ module Yast
           Update_Service_Status()
           return
         end
-        # do not check result for starting boot.multipath
-        ret = Service.Start("boot.multipath")
         ret = Service.Start("multipathd")
         if ret == false
           prop_info = Ops.add(
@@ -3680,7 +3668,6 @@ module Yast
           return
         end
       else
-        #		CallInsserv(true, "boot.multipath");
         #		CallInsserv(true, "multipathd");
         Storage.ActivateMultipath(true)
       end
@@ -3706,8 +3693,6 @@ module Yast
           Update_Service_Status()
           return
         end
-        # do not check result of stopping boot.multipath
-        ret = Service.Stop("boot.multipath")
         ret = Service.Disable("multipathd")
         if ret == false
           prop_info = Ops.add(
@@ -3718,20 +3703,9 @@ module Yast
           Update_Service_Status()
           return
         end
-        ret = Service.Disable("boot.multipath")
-        if ret == false
-          prop_info = Ops.add(
-            Ops.add(prop_info, _("* Cannot disable boot.multipath.")),
-            "\n"
-          )
-          Popup.Message(prop_info)
-          Update_Service_Status()
-          return
-        end
       else
         Storage.ActivateMultipath(false) 
         #		CallInsserv(false, "multipathd");
-        #		CallInsserv(false, "boot.multipath");
       end
 
       @service_status = 0
