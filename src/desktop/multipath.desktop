@@ -4,7 +4,6 @@ Categories=Qt;X-SuSE-YaST;X-SuSE-YaST-High_Availability;
 
 X-KDE-ModuleType=Library
 X-KDE-HasReadOnlyMode=true
-X-KDE-Library=yast2
 X-SuSE-YaST-Call=multipath
 
 X-SuSE-YaST-Group=High_Availability
