@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Jan 26 12:26:32 UTC 2015 - jreidinger@suse.com
+
+- fixed \r character lost during conversion to Ruby
+
+-------------------------------------------------------------------
 Thu Oct 30 02:30:24 UTC 2014 - nwang@suse.com
 
 - BNC#900822. Remove start/stop "boot.multipath" due to

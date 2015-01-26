@@ -686,7 +686,7 @@ module Yast
       str_end = Ops.subtract(str_len, 1)
       while Ops.less_than(str_start, str_len)
         cur_char = Builtins.substring(value, str_start, 1)
-        if cur_char == " " || cur_char == "\t" || cur_char == " " ||
+        if cur_char == " " || cur_char == "\t" || cur_char == "\r" ||
             cur_char == "\n" ||
             cur_char == "\""
           str_start = Ops.add(str_start, 1)
@@ -697,7 +697,7 @@ module Yast
 
       while Ops.greater_than(str_end, str_start)
         cur_char = Builtins.substring(value, str_end, 1)
-        if cur_char == " " || cur_char == "\t" || cur_char == " " ||
+        if cur_char == " " || cur_char == "\t" || cur_char == "\r" ||
             cur_char == "\n" ||
             cur_char == "\""
           str_end = Ops.subtract(str_end, 1)
