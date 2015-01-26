@@ -1,8 +1,7 @@
 -------------------------------------------------------------------
 Mon Jan 26 12:26:32 UTC 2015 - jreidinger@suse.com
 
-- fix removing \r character accidentally removed during conversion
-  to ruby
+- fixed \r character lost during conversion to Ruby
 
 -------------------------------------------------------------------
 Thu Oct 30 02:30:24 UTC 2014 - nwang@suse.com
