@@ -3,7 +3,7 @@ Mon May  4 08:41:04 UTC 2015 - lszhu@suse.com
 
 - BNC#925864, fix a bug on that path selector not working, add
   service-time 0 and queue-length 0.
-
+  Version 3.1.6
 -------------------------------------------------------------------
 Mon Jan 26 12:26:32 UTC 2015 - jreidinger@suse.com
 
