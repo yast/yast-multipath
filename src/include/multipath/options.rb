@@ -104,6 +104,16 @@ module Yast
             "id"     => :round_robin,
             "optstr" => "\"round-robin 0\""
           },
+         {
+            "name"   => "service_time",
+            "id"     => :service_time,
+            "optstr" => "\"service-time 0\""
+          },
+         {
+            "name"   => "queue_length",
+            "id"     => :queue_length,
+            "optstr" => "\"queue-length 0\""
+          },
           { "name" => "none", "id" => :none, "optstr" => "" }
         ]
       }
@@ -635,6 +645,7 @@ module Yast
         :prio_callout,
         :features,
         :path_checker,
+        :path_selector,
         :failback,
         :rr_min_io,
         :rr_weight,
@@ -934,6 +945,10 @@ module Yast
       value = Ops.get_string(item, "selector", "")
       if value == "round-robin 0"
         UI.ChangeWidget(Id(:selector), :Value, :round_robin)
+      elsif value == "service-time 0"
+        UI.ChangeWidget(Id(:selector), :Value, :service_time)
+      elsif value == "queue-length 0"
+        UI.ChangeWidget(Id(:selector), :Value, :queue_length)
       elsif value == ""
         UI.ChangeWidget(Id(:selector), :Value, :none)
       else
@@ -951,6 +966,10 @@ module Yast
       ret = UI.QueryWidget(Id(:selector), :Value)
       if ret == :round_robin
         value = "round-robin 0"
+      elsif ret == :service_time
+        value = "service-time 0"
+      elsif ret == :queue_length
+        value = "queue-length 0"
       elsif ret == :none
         value = ""
       else
@@ -967,7 +986,7 @@ module Yast
       header = "* \"selector\" "
       ret = {}
       value = Ops.get_string(item, "selector", "")
-      if value == "" || value == "round-robin 0"
+      if value == "" || value == "round-robin 0" || value == "service-time 0" || value =="queue-length 0"
         Ops.set(ret, "result", true)
         Ops.set(ret, "info", "")
       else
@@ -1009,6 +1028,10 @@ module Yast
       value = Ops.get_string(item, "path_selector", "")
       if value == "round-robin 0"
         UI.ChangeWidget(Id(:path_selector), :Value, :round_robin)
+      elsif value == "service-time 0"
+        UI.ChangeWidget(Id(:path_selector), :Value, :service_time)
+      elsif value == "queue-length 0"
+        UI.ChangeWidget(Id(:path_selector), :Value, :queue_length)        
       elsif value == ""
         UI.ChangeWidget(Id(:path_selector), :Value, :none)
       else
@@ -1029,6 +1052,10 @@ module Yast
       ret = UI.QueryWidget(Id(:path_selector), :Value)
       if ret == :round_robin
         value = "round-robin 0"
+      elsif ret == :service_time
+        value = "service-time 0"
+      elsif ret == :queue_length
+        value = "queue-length 0"        
       elsif ret == :none
         value = ""
       else
@@ -1044,7 +1071,7 @@ module Yast
       item = deep_copy(item)
       ret = {}
       value = Ops.get_string(item, "path_selector", "")
-      if value == "" || value == "round-robin 0"
+      if value == "" || value == "round-robin 0" || value == "service-time 0" || value == "queue-length 0"
         Ops.set(ret, "result", true)
         Ops.set(ret, "info", "")
       else

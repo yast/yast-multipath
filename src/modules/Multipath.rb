@@ -294,7 +294,7 @@ module Yast
           if 0 !=
               SCR.Execute(
                 path(".target.bash"),
-                "/etc/init.d/multipathd restart"
+                "service multipathd restart"
               )
             Report.Error(_("Restarting multipathd failed."))
             return false
