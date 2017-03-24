@@ -24,8 +24,6 @@
 # Summary:	Complex stuffs for multipath yast module
 # Authors:	Coly Li <coyli@novell.com>
 #
-# $Id: complex.ycp,v 1.49 2007/01/22 03:25:16 coly Exp $
-#
 # Compelx stuffs for multipath yast module, this file is included
 # by Multipath.ycp.
 module Yast
@@ -3627,21 +3625,6 @@ module Yast
       nil
     end
 
-    def CallInsserv(on, name)
-      Builtins.y2milestone("CallInsserv on:%1 name:%2", on, name)
-      scrname = Ops.add("/etc/init.d/", name)
-      if Ops.greater_than(SCR.Read(path(".target.size"), scrname), 0)
-        cmd = "cd / && /sbin/insserv "
-        cmd = Ops.add(cmd, "-r ") if !on
-        cmd = Ops.add(cmd, scrname)
-        Builtins.y2milestone("CallInsserv cmd %1", cmd)
-        bo = Convert.to_map(SCR.Execute(path(".target.bash_output"), cmd))
-        Builtins.y2milestone("CallInsserv bo %1", bo)
-      end
-
-      nil
-    end
-
     def Start_Service
       return if @service_status == 1
       prop_info = _("Use multipath failed:") + "\n"
@@ -3668,7 +3651,6 @@ module Yast
           return
         end
       else
-        #		CallInsserv(true, "multipathd");
         Storage.ActivateMultipath(true)
       end
 
@@ -3705,7 +3687,6 @@ module Yast
         end
       else
         Storage.ActivateMultipath(false) 
-        #		CallInsserv(false, "multipathd");
       end
 
       @service_status = 0
