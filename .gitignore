@@ -19,3 +19,5 @@ stamp-h
 multipath.pot
 autom4te.cache
 *.ami
+/doc
+/.yardoc
