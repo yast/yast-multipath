@@ -29,6 +29,7 @@
 # Representation of the configuration of multipath.
 # Input and output routines.
 require "yast"
+require "y2storage"
 
 module Yast
   class MultipathClass < Module
@@ -47,7 +48,6 @@ module Yast
       Yast.import "PackageSystem"
       Yast.import "Mode"
       Yast.import "Stage"
-      Yast.import "Storage"
 
       @config_modified = false
 
@@ -300,8 +300,10 @@ module Yast
             return false
           end
         else
-          Storage.ActivateMultipath(false)
-          Storage.ActivateMultipath(true)
+          # There is no multipathd service, rely on Y2Storage to deactivate and
+          # reactivate multipath (and all the associated virtual devices)
+          Y2Storage::StorageManager.instance.deactivate
+          Y2Storage::StorageManager.instance.activate
         end
         Builtins.sleep(sl)
       end

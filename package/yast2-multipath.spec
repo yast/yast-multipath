@@ -24,11 +24,12 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Source0:        %{name}-%{version}.tar.bz2
 
 Requires:       yast2
+# StorageManager#deactivate
+Requires:       yast2-storage-ng >= 3.3.1
 BuildRequires:  perl-XML-Writer
 BuildRequires:  update-desktop-files
 BuildRequires:  yast2
 BuildRequires:  yast2-devtools >= 3.1.10
-BuildRequires:  yast2-storage
 BuildRequires:  yast2-testsuite
 
 BuildArch:      noarch
