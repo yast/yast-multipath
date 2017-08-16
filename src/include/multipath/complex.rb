@@ -26,6 +26,10 @@
 #
 # Compelx stuffs for multipath yast module, this file is included
 # by Multipath.ycp.
+
+require "yast"
+require "y2storage"
+
 module Yast
   module MultipathComplexInclude
     def initialize_multipath_complex(include_target)
@@ -34,7 +38,6 @@ module Yast
       textdomain "multipath"
 
       Yast.import "Service"
-      Yast.import "Storage"
       Yast.import "Label"
       Yast.import "Wizard"
       Yast.import "Mode"
@@ -3651,7 +3654,8 @@ module Yast
           return
         end
       else
-        Storage.ActivateMultipath(true)
+        # There is no multipathd service, rely on Y2Storage
+        Y2Storage::StorageManager.instance.activate
       end
 
       @service_status = 1
@@ -3686,7 +3690,8 @@ module Yast
           return
         end
       else
-        Storage.ActivateMultipath(false) 
+        # There is no multipathd service, rely on Y2Storage
+        Y2Storage::StorageManager.instance.deactivate
       end
 
       @service_status = 0
