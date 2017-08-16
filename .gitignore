@@ -19,3 +19,10 @@ stamp-h
 multipath.pot
 autom4te.cache
 *.ami
+.yardoc/
+doc
+*.pot
+testsuite/config
+testsuite/run
+testsuite/site.exp
+testsuite/yast2-multipath.*
