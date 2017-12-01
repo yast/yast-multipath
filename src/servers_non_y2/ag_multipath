@@ -1,11 +1,11 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf8 -*-
 
 #
-# Authors:	Hu Ziming <hzmangel@gmail.com>
-#		Lukas Ocilka <locilka@suse.cz>
+# Authors:        Hu Ziming <hzmangel@gmail.com>
+#                Lukas Ocilka <locilka@suse.cz>
 #
-# File:		ag_multipath
+# File:                ag_multipath
 #
 # License:
 #
@@ -34,7 +34,7 @@ import re
 import os
 import sys
 
-class Pattern:
+class Pattern(object):
     uuid = r'^\w{3,}'
     uuid_spliter_1_start = '('
     uuid_spliter_1_end = ')'
@@ -44,10 +44,10 @@ class Pattern:
     path = r' \\_'
 # <-- class Pattern
 
-class Multipath_Parser:
+class Multipath_Parser(object):
 
     def __init__(self, command):
-	self.command = command
+        self.command = command
 
     def get_mode(self, dataline):
         if re.compile(Pattern.uuid).match(dataline):
@@ -66,14 +66,14 @@ class Multipath_Parser:
         curr_group = -1
         curr_path = -1
 
-	# calls system command
-	# TODO: use non blocking Popen3 class
+        # calls system command
+        # TODO: use non blocking Popen3 class
         fp = os.popen(self.command)
         self.data = fp.readlines()
         fp.close()
         self.formatted = []
 
-	# parses system command output
+        # parses system command output
         for dataline in self.data:
             data_dict, mode = self.parse_line(dataline)
             if mode == None:
@@ -121,7 +121,7 @@ class Multipath_Parser:
             #    print mode
             #    print data_dict
 
-	# list of maps
+        # list of maps
         return self.output()
 
 
@@ -133,30 +133,30 @@ class Multipath_Parser:
         for device in self.formatted:
             out = out +  '\t$[\n'
 
-	    for key in ['uuid', 'alias', 'misc', 'size', 'features', 'hwhandler']:
-		out = out +  '\t\t"%s":"%s",\n' % (key, device[key])
+            for key in ['uuid', 'alias', 'misc', 'size', 'features', 'hwhandler']:
+                out = out +  '\t\t"%s":"%s",\n' % (key, device[key])
 
-            for path_group in xrange(device['group_cnt']):
+            for path_group in range(device['group_cnt']):
                 out = out +  '\t\t"path_group":$[\n'
                 group_index = 'PG%d' % path_group
 
-		for key in ['selector', 'prio']:
-		    out = out +  '\t\t\t"%s":"%s",\n' % (key, device[group_index][key])
+                for key in ['selector', 'prio']:
+                    out = out +  '\t\t\t"%s":"%s",\n' % (key, device[group_index][key])
 
-                for path in xrange(device[group_index]['path_cnt']):
+                for path in range(device[group_index]['path_cnt']):
                     out = out +  '\t\t\t"path":$[\n'
                     path_index = 'P%d' % path
 
-		    out = out +  '\t\t\t\t"%s":"%s",\n' % ('bus_address' , device[group_index][path_index]['bus_addr'])
+                    out = out +  '\t\t\t\t"%s":"%s",\n' % ('bus_address' , device[group_index][path_index]['bus_addr'])
 
-		    for key in ['path_device', 'major', 'minor', 'status1', 'status2']:
-			out = out +  '\t\t\t\t"%s":"%s",\n' % (key , device[group_index][path_index][key])
+                    for key in ['path_device', 'major', 'minor', 'status1', 'status2']:
+                        out = out +  '\t\t\t\t"%s":"%s",\n' % (key , device[group_index][path_index][key])
 
                     out = out +  '\t\t\t],\n'
                 out = out +  '\t\t],\n'
             out = out +  '\t],\n'
 
-	out = out + "]"
+        out = out + "]"
 
         return out
 
@@ -216,62 +216,62 @@ class Multipath_Parser:
         return (data_dict, mode)
 # <-- class Multipath_Parser
 
-class SCR_Agent:
+class SCR_Agent(object):
 
     def __init__(self):
-	self.command = ""
-	self.path = ""
-	self.args = ""
+        self.command = ""
+        self.path = ""
+        self.args = ""
 
     def SCR_Command (self):
-	scr_command = sys.stdin.readline()
+        scr_command = sys.stdin.readline()
 
-	# scr_command examples:
-	#   `Read(.)
-	#   `Read (.some.path)
-	#   `Write (.some.path, "value")
+        # scr_command examples:
+        #   `Read(.)
+        #   `Read (.some.path)
+        #   `Write (.some.path, "value")
 
 
-	# the first argument is command
-	p = re.compile ('^`\w+')
-	if (p.match (scr_command)):
-	    self.command = p.search (scr_command).group()
+        # the first argument is command
+        p = re.compile ('^`\w+')
+        if (p.match (scr_command)):
+            self.command = p.search (scr_command).group()
 
-	# FIXME: parse path
-	# FIXME: parse args
+        # FIXME: parse path
+        # FIXME: parse args
 
     # <-- SCR_Command
 # <-- class SCR_Agent
 
 def main():
     while True:
-	scr_agent = SCR_Agent ()
-	scr_agent.SCR_Command ()
+        scr_agent = SCR_Agent ()
+        scr_agent.SCR_Command ()
 
 
-	# SCR::Read
-	if (scr_agent.command == '`Read'):
-	    # This is a fake, the command returns what would '/sbin/multipath -l'
-	    # return if it was supported
-	    # You can use ag_multipath_testdata1.out or ag_multipath_testdata2.out
-	    # as a source of data
-	    #
-	    # foobar = Multipath_Parser('/yast/test/multipath/multipath.sh')
+        # SCR::Read
+        if (scr_agent.command == '`Read'):
+            # This is a fake, the command returns what would '/sbin/multipath -l'
+            # return if it was supported
+            # You can use ag_multipath_testdata1.out or ag_multipath_testdata2.out
+            # as a source of data
+            #
+            # foobar = Multipath_Parser('/yast/test/multipath/multipath.sh')
 
-	    foobar = Multipath_Parser('/sbin/multipath -l')
-	    ret = foobar.parse()
+            foobar = Multipath_Parser('/sbin/multipath -l')
+            ret = foobar.parse()
 
-	    # print the data to stdout as string
-	    print ret + "\n"
-	    # flushing, otherwise it is buffered
-	    sys.stdout.flush()
+            # print the data to stdout as string
+            print(ret + "\n")
+            # flushing, otherwise it is buffered
+            sys.stdout.flush()
 
-	# Exit
-	elif (scr_agent.command == '`result'):
-	    break
-	else:
-	    print "nil\n"
-	    sys.stdout.flush()
+        # Exit
+        elif (scr_agent.command == '`result'):
+            break
+        else:
+            print("nil\n")
+            sys.stdout.flush()
 # <-- main
 
 if __name__ == '__main__':
