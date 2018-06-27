@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jun 27 13:30:31 CEST 2018 - schubi@suse.de
+
+- Added additional searchkeys to desktop file (fate#321043).
+- 4.0.1
+
+-------------------------------------------------------------------
 Fri Dec  1 06:36:14 UTC 2017 - nwang@suse.com
 
 - fate#323526, support python3 and change indentation to 8 spaces.
