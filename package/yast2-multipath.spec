@@ -67,5 +67,6 @@ You can configure your multipathed devices with this module.
 %{_prefix}/share/YaST2/scrconf/*.scr
 %{_prefix}/lib/YaST2/servers_non_y2/*
 %doc %{_prefix}/share/doc/packages/yast2-multipath
+%license COPYING
 
 %changelog
