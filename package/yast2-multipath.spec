@@ -68,6 +68,6 @@ You can configure your multipathed devices with this module.
 %{_prefix}/lib/YaST2/servers_non_y2/*
 %doc %{_prefix}/share/doc/packages/yast2-multipath
 %license COPYING
-%{_datadir}/icons/*
+%{yast_icondir}
 
 %changelog
