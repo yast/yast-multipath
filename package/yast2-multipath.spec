@@ -17,7 +17,7 @@
 
 
 Name:           yast2-multipath
-Version:        4.0.1
+Version:        4.1.0
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -68,5 +68,6 @@ You can configure your multipathed devices with this module.
 %{_prefix}/lib/YaST2/servers_non_y2/*
 %doc %{_prefix}/share/doc/packages/yast2-multipath
 %license COPYING
+%{yast_icondir}
 
 %changelog
