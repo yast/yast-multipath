@@ -29,7 +29,7 @@
 
 require "yast"
 require "y2storage"
-require "securerandom"
+require "tempfile"
 
 module Yast
   module MultipathComplexInclude
@@ -51,8 +51,8 @@ module Yast
       @has_dumbtab = false
       @device_template = "vendor %1; product %2"
 
-      r = SecureRandom.hex
-      @builtin_multipath_conf_path = "/tmp/.yast2-multipath-builtin-conf-" + r[0,8]
+      tfile = Tempfile.new('.yast2-multipath-builtin-conf')
+      @builtin_multipath_conf_path = tfile.path
 
       Yast.include include_target, "multipath/options.rb"
 
