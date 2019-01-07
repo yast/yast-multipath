@@ -51,6 +51,8 @@ module Yast
       @has_dumbtab = false
       @device_template = "vendor %1; product %2"
 
+      # Using instance variable to keep the reference to the tempfile
+      # to avoid removing by the object finalizer
       @tfile = Tempfile.new('.yast2-multipath-builtin-conf')
       @builtin_multipath_conf_path = @tfile.path
 
