@@ -30,6 +30,7 @@
 # Input and output routines.
 require "yast"
 require "y2storage"
+require "yast2/execute"
 
 module Yast
   class MultipathClass < Module
@@ -87,10 +88,20 @@ module Yast
 
 
       # prepare for loading built-in configurations
-      SCR.Execute(
-        path(".target.bash"),
-        Ops.add("/sbin/multipath -t > ", @builtin_multipath_conf_path)
-      )
+      cmd = "/sbin/multipath"
+      para = "-t"
+      begin
+        File.open(@builtin_multipath_conf_path, "w") do |stdout|
+          Cheetah.run(cmd, para, stdout: stdout)
+        end
+      rescue Cheetah::ExecutionFailed => e
+        if e.stderr != nil
+          err_msg = _("Failed to show the currently used multipathd configuration.")
+          err_msg += e.stderr
+          Yast::Popup.Error(err_msg)
+          return false
+        end
+      end
 
       ret = Read_MultipathConfig()
       if ret == false

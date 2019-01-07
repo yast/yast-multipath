@@ -29,6 +29,7 @@
 
 require "yast"
 require "y2storage"
+require "tempfile"
 
 module Yast
   module MultipathComplexInclude
@@ -49,7 +50,11 @@ module Yast
       @service_status = 0
       @has_dumbtab = false
       @device_template = "vendor %1; product %2"
-      @builtin_multipath_conf_path = "/tmp/.yast2-multipath-builtin-conf"
+
+      # Using instance variable to keep the reference to the tempfile
+      # to avoid removing by the object finalizer
+      @tfile = Tempfile.new('.yast2-multipath-builtin-conf')
+      @builtin_multipath_conf_path = @tfile.path
 
       Yast.include include_target, "multipath/options.rb"
 
