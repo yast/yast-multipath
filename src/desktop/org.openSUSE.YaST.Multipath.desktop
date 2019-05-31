@@ -18,5 +18,6 @@ X-SuSE-YaST-Keywords=network,tcp
 Icon=yast-iscsi-server
 Exec=xdg-su -c "/sbin/yast2 multipath"
 
-Name=Multipath
-GenericName=multipath
+Name=YaST Multipath
+GenericName=Multipath
+Comment=Configure iSCSI Multipath
