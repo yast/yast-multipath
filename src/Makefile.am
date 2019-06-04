@@ -21,7 +21,7 @@ agent_SCRIPTS = \
   servers_non_y2/ag_multipath
 
 desktop_DATA = \
-  desktop/multipath.desktop
+  desktop/org.opensuse.yast.Multipath.desktop
 
 symbolicdir = @icondir@/hicolor/symbolic/apps
 symbolic_DATA = \

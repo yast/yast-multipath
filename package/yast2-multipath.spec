@@ -12,33 +12,32 @@
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
 
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
+# Please submit bugfixes or comments via https://bugs.opensuse.org/
 #
 
 
 Name:           yast2-multipath
-Version:        4.1.1
+Version:        4.2.0
 Release:        0
+Summary:        YaST2 - Multipath Configuration
+License:        GPL-2.0-or-later
+Group:          System/YaST
+Url:            https://github.com/yast/yast-multipath
 
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Source0:        %{name}-%{version}.tar.bz2
+
+BuildRequires:  perl-XML-Writer
+BuildRequires:  update-desktop-files
+BuildRequires:  yast2
+BuildRequires:  yast2-devtools >= 4.2.2
+BuildRequires:  yast2-testsuite
 
 Requires:       yast2
 # StorageManager#deactivate
 Requires:       yast2-storage-ng >= 3.3.1
-BuildRequires:  perl-XML-Writer
-BuildRequires:  update-desktop-files
-BuildRequires:  yast2
-BuildRequires:  yast2-devtools >= 3.1.10
-BuildRequires:  yast2-testsuite
-
-BuildArch:      noarch
-
 Requires:       yast2-ruby-bindings >= 1.0.0
 
-Summary:        YaST2 - Multipath Configuration
-License:        GPL-2.0-or-later
-Group:          System/YaST
+BuildArch:      noarch
 
 %description
 Multipath I/O is a fault tolerance technique whereby there is more than
@@ -49,24 +48,24 @@ devices connecting them.
 You can configure your multipathed devices with this module.
 
 %prep
-%setup -n %{name}-%{version}
+%setup -q
 
 %build
 %yast_build
 
 %install
 %yast_install
+%yast_metainfo
 
 %files
-%defattr(-,root,root)
-%dir %{_prefix}/share/YaST2/include/multipath
-%{_prefix}/share/YaST2/include/multipath/*
-%{_prefix}/share/YaST2/clients/multipath.rb
-%{_prefix}/share/YaST2/modules/Multipath.*
-%{_prefix}/share/applications/YaST2/multipath.desktop
-%{_prefix}/share/YaST2/scrconf/*.scr
-%{_prefix}/lib/YaST2/servers_non_y2/*
-%doc %{_prefix}/share/doc/packages/yast2-multipath
+%{yast_yncludedir}
+%{yast_clientdir}
+%{yast_moduledir}
+%{yast_desktopdir}
+%{yast_metainfodir}
+%{yast_scrconfdir}
+%{yast_agentdir}
+%doc %{yast_docdir}
 %license COPYING
 %{yast_icondir}
 
