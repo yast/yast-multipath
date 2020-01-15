@@ -1,8 +1,0 @@
-3600601607cf30e00194589a37a31d911DGC,DISK
-[size=127G][features=1 queue_if_no_path][hwhandler=1 emc]
-\_ round-robin 0 [prio=0][active]
- \_ 0:0:0:3  sdd 8:48  [active][undef]
-3600601607cf30e006eaf8bb37a31d911DGC,DISK
-[size=133G][features=1 queue_if_no_path][hwhandler=1 emc]
-\_ round-robin 0 [prio=0][active]
- \_ 0:0:0:10 sdk 8:160 [active][undef]
