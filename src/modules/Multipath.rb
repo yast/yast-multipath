@@ -216,9 +216,7 @@ module Yast
 
       # read multipath service status
       if Mode.normal && Stage.normal
-        @service_status = Convert.to_integer(
-          SCR.Execute(path(".target.bash"), "/etc/init.d/multipathd status")
-        )
+        @service_status = SCR.Execute(path(".target.bash"), "/usr/bin/systemctl status multipathd")
         @service_status = 1 if Ops.greater_than(@service_status, 0)
       else
         @service_status = Convert.to_integer(
@@ -305,7 +303,7 @@ module Yast
           if 0 !=
               SCR.Execute(
                 path(".target.bash"),
-                "service multipathd restart"
+                "/usr/bin/systemctl restart multipathd"
               )
             Report.Error(_("Restarting multipathd failed."))
             return false
