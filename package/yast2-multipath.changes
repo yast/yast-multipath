@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Apr 20 13:51:55 UTC 2021 - Ladislav Slezák <lslezak@suse.cz>
+
+- 4.4.0
+
+-------------------------------------------------------------------
 Wed Jan 15 12:56:13 UTC 2020 - Josef Reidinger <jreidinger@suse.com>
 
 - replace old init.d compat symlinks usage by direct calling
