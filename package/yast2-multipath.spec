@@ -1,7 +1,7 @@
 #
 # spec file for package yast2-multipath
 #
-# Copyright (c) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2021 SUSE LLC
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -17,26 +17,22 @@
 
 
 Name:           yast2-multipath
-Version:        4.4.0
+Version:        4.4.1
 Release:        0
 Summary:        YaST2 - Multipath Configuration
 License:        GPL-2.0-or-later
 Group:          System/YaST
-Url:            https://github.com/yast/yast-multipath
-
+URL:            https://github.com/yast/yast-multipath
 Source0:        %{name}-%{version}.tar.bz2
-
 BuildRequires:  perl-XML-Writer
 BuildRequires:  update-desktop-files
 BuildRequires:  yast2
-BuildRequires:  yast2-devtools >= 4.2.2
+BuildRequires:  yast2-devtools >= 4.4.0
 BuildRequires:  yast2-testsuite
-
 Requires:       yast2
 # StorageManager#deactivate
-Requires:       yast2-storage-ng >= 3.3.1
 Requires:       yast2-ruby-bindings >= 1.0.0
-
+Requires:       yast2-storage-ng >= 3.3.1
 BuildArch:      noarch
 
 %description
@@ -58,6 +54,7 @@ You can configure your multipathed devices with this module.
 %yast_metainfo
 
 %files
+%license COPYING
 %{yast_yncludedir}
 %{yast_clientdir}
 %{yast_moduledir}
@@ -65,8 +62,6 @@ You can configure your multipathed devices with this module.
 %{yast_metainfodir}
 %{yast_scrconfdir}
 %{yast_agentdir}
-%doc %{yast_docdir}
-%license COPYING
 %{yast_icondir}
 
 %changelog
